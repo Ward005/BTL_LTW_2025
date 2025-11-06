@@ -25,6 +25,8 @@
 </head>
 <body>
     <div>
+        @* Header *@
+
         @await Html.PartialAsync("_PagePreloder")
 
         @await Html.PartialAsync("_OffCanvasMenu")
@@ -33,6 +35,7 @@
 
         @RenderBody()
 
+        @* Footer *@
         @await Html.PartialAsync("_Footer")
     </div>
 
