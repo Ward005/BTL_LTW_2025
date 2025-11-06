@@ -1,0 +1,28 @@
+﻿@model IEnumerable<BTL_LTW.ViewModels.BannerVM>
+
+@{
+    var banners = Model.ToList();
+}
+
+<!-- Banner Section Begin -->
+<section class="banner spad">
+    <div class="container">
+        <div class="row">
+            @for (var i = 0; i < banners.Count(); i++)
+            {
+                <div class="@(i == 0 ? "col-lg-7 offset-lg-4" : i == 1 ? "col-lg-5" : "col-lg-7")">
+                    <div class="banner__item @(i == 0 ? "" : i == 1 ? "banner__item--middle" : "banner__item--last")">
+                        <div class="banner__item__pic">
+                            <img src="~/img/banner/banner-@(i + 1).jpg" alt="">
+                        </div>
+                        <div class="banner__item__text">
+                            <h2>BST @banners[i].TenBanner 2025</h2>
+                            <a asp-controller="Shop" asp-action="Index" asp-route-category="@banners[i].MaBanner">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+<!-- Banner Section End -->

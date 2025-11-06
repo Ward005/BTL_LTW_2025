@@ -1,0 +1,21 @@
+﻿@model IEnumerable<BTL_LTW.ViewModels.Category>
+
+<div class="card">
+    <div class="card-heading">
+        <a data-toggle="collapse" data-target="#collapseOne">Danh Mục</a>
+    </div>
+    <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+        <div class="card-body">
+            <div class="shop__sidebar__categories">
+                <ul class="nice-scroll">
+                    @foreach(var item in Model)
+                    {
+                        <li>
+                            <a asp-controller="Shop" asp-action="Index" asp-route-category="@item.MaCategory">@item.TenCategory (@item.SLCategory)</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+﻿@model IEnumerable<BTL_LTW.ViewModels.HeroVM>
+
+<!-- Hero Section Begin -->
+<section class="hero">
+    <div class="hero__slider owl-carousel">
+        @foreach(var item in Model)
+        {
+            <div class="hero__items set-bg" data-setbg="img/hero/@item.AnhHero">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-5 col-lg-7 col-md-8">
+                        <div class="hero__text">
+                            <h6>Summer Collection</h6>
+                            <h2>@item.TieuDeHero</h2>
+                            <p>
+                                @item.MoTaHero
+                            </p>
+                            <a asp-controller="Shop" asp-action="Pagination" class="primary-btn">Shop now<span class="arrow_right"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</section>
+<!-- Hero Section End -->
