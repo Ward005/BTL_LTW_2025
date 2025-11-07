@@ -4,6 +4,12 @@
     ViewData["Title"] = "Shop";
     Layout = "_Shop";
     var products = Model.ToList();
+
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    int? category = ViewBag.Category;
+    double? price = ViewBag.Price;
+    string query = ViewBag.Query ?? "";
 }
 
 <!-- Breadcrumb Section Begin -->
@@ -36,5 +42,40 @@
     }
 </div>
 
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        @if (currentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="/Shop?category=@category&price=@price&query=@query&currentPage=@(currentPage - 1)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
 
-                
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            if (i == currentPage)
+            {
+                <li class="page-item active">
+                    <a class="page-link" href="/Shop?category=@category&price=@price&query=@query&currentPage=@i">@i</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" href="/Shop?category=@category&price=@price&query=@query&currentPage=@i">@i</a>
+                </li>
+            }
+        }
+
+        @if (currentPage < totalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" href="/Shop?category=@category&price=@price&query=@query&currentPage=@(currentPage + 1)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>                
