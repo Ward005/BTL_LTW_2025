@@ -11,5 +11,5 @@ public partial class AnhSanPham
 
     public string? DuongDan { get; set; }
 
-    public virtual SanPham? MaSpNavigation { get; set; }
+    public virtual SanPhams? MaSpNavigation { get; set; }
 }
