@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace BTL_LTW.Data;
 
-public partial class SanPham
+public partial class SanPhams
 {
-    public int MaSp { get; set; }
+    public int? MaSp { get; set; }
 
     public string? TenSp { get; set; }
 
