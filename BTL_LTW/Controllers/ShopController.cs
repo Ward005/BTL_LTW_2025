@@ -9,7 +9,7 @@ namespace BTL_LTW.Controllers
 {
     public class ShopController : Controller
     {
-        private readonly MaleFashionContext db;
+            private readonly MaleFashionContext db;
 
         public ShopController(MaleFashionContext context) => db = context;
         public IActionResult Index(int? category)
