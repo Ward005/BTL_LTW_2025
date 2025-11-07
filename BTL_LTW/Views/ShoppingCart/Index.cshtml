@@ -1,0 +1,144 @@
+﻿@model List<BTL_LTW.ViewModels.ShoppingCartVM>
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+
+<section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Shopping Cart</h4>
+                        <div class="breadcrumb__links">
+                            <a href="./index.html">Home</a>
+                            <a href="./shop.html">Shop</a>
+                            <span>Shopping Cart</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<section class="shopping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="shopping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="cart-item" data-price="@item.GiaSP">
+                                        <td class="product__cart__item">
+                                            <div class="product__cart__item__pic">
+                                                <img src="@item.AnhChinhSP" width="90" />
+                                            </div>
+                                            <div class="product__cart__item__text">
+                                                <h6>@item.TenSP</h6>
+                                                <p>@item.MoTa</p>
+                                            </div>
+                                        </td>
+                                        <td class="quantity__item">
+                                            <div class="quantity">
+                                                <input type="number" min="1" value="@item.SoLuong" class="quantity-input" />
+                                            </div>
+                                        </td>
+                                        <td class="cart__price">$<span class="total">@item.Total</span></td>
+                                        <td class="cart__close"><i class="fa fa-close"></i></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn">
+                                <a asp-controller="Shop" asp-action="Index" >Continue Shopping</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn update__btn">
+                                <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ma Giam -->
+                <div class="col-lg-4">
+                    <div class="cart__discount">
+                        <h6>Discount codes</h6>
+                        <form action="#">
+                            <input type="text" placeholder="Coupon code">
+                            <button type="submit">Apply</button>
+                        </form>
+                    </div>
+                    <div class="cart__total">
+                        <h6>Cart total</h6>
+                        <ul>
+                            <li>Total <span id="cartSubtotal">0.00</span></li>
+                        </ul>
+                        <a href="#" class="primary-btn">Proceed to checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+ <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const cartRows = document.querySelectorAll(".cart-item");
+    const checkoutBtn = document.querySelector(".primary-btn"); // Nút Proceed to checkout
+    const subtotalEl = document.getElementById("cartSubtotal");
+
+    // Hàm tính tổng tiền cho từng sản phẩm
+    function updateRowTotal(row) {
+        const input = row.querySelector(".quantity-input");
+        const totalEl = row.querySelector(".total");
+        const price = parseFloat(row.dataset.price);
+        const qty = parseInt(input.value) || 0;
+        const total = qty * price;
+        totalEl.textContent = total.toLocaleString(undefined, { minimumFractionDigits: 2 });
+        return total;
+    }
+
+    // Hàm tính tổng toàn bộ giỏ hàng
+    function calculateCartTotal() {
+        let sum = 0;
+        cartRows.forEach(row => {
+            sum += updateRowTotal(row);
+        });
+        subtotalEl.textContent = sum.toLocaleString(undefined, { minimumFractionDigits: 2 });
+        return sum;
+    }
+
+    // Khi thay đổi số lượng thì cập nhật tổng từng dòng
+    cartRows.forEach(row => {
+        const input = row.querySelector(".quantity-input");
+        input.addEventListener("input", function () {
+            updateRowTotal(row);
+        });
+    });
+
+    // Khi bấm "Proceed to checkout"
+    checkoutBtn.addEventListener("click", function (e) {
+        e.preventDefault(); // Ngăn reload trang
+        const total = calculateCartTotal();
+        alert("Tổng đơn hàng của bạn là: $" + total.toLocaleString(undefined, { minimumFractionDigits: 2 }));
+    });
+});
+</script>
