@@ -51,13 +51,13 @@ public partial class MaleFashionContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=ADMIN\\SQLEXPRESS;Initial Catalog=MaleFashion;Integrated Security=True;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-RT1K5NV;Initial Catalog=MaleFashion;Integrated Security=True;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AnhSanPham>(entity =>
         {
-            entity.HasKey(e => e.MaAnh).HasName("PK__AnhSanPh__356240DF35900673");
+            entity.HasKey(e => e.MaAnh).HasName("PK__AnhSanPh__356240DFC8293662");
 
             entity.ToTable("AnhSanPham");
 
@@ -71,7 +71,7 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<BaiViet>(entity =>
         {
-            entity.HasKey(e => e.MaBv).HasName("PK__BaiViet__2724759587D7BE83");
+            entity.HasKey(e => e.MaBv).HasName("PK__BaiViet__2724759561F30DD3");
 
             entity.ToTable("BaiViet");
 
@@ -90,7 +90,7 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<Banner>(entity =>
         {
-            entity.HasKey(e => e.MaBanner).HasName("PK__Banner__508B4A4929428755");
+            entity.HasKey(e => e.MaBanner).HasName("PK__Banner__508B4A49A63AE031");
 
             entity.ToTable("Banner");
 
@@ -103,7 +103,7 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<BinhLuan>(entity =>
         {
-            entity.HasKey(e => e.MaBl).HasName("PK__BinhLuan__272475AF88038876");
+            entity.HasKey(e => e.MaBl).HasName("PK__BinhLuan__272475AF16312530");
 
             entity.ToTable("BinhLuan");
 
@@ -126,7 +126,7 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<ChiTietDonHang>(entity =>
         {
-            entity.HasKey(e => new { e.MaDh, e.MaSp }).HasName("PK__ChiTietD__F557D6E0CEDA5D68");
+            entity.HasKey(e => new { e.MaDh, e.MaSp }).HasName("PK__ChiTietD__F557D6E0FDE009F7");
 
             entity.ToTable("ChiTietDonHang");
 
@@ -147,7 +147,7 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<ChiTietGioHang>(entity =>
         {
-            entity.HasKey(e => new { e.MaGioHang, e.MaSp }).HasName("PK__ChiTietG__27724D22FCFFBD43");
+            entity.HasKey(e => new { e.MaGioHang, e.MaSp }).HasName("PK__ChiTietG__27724D2291F87083");
 
             entity.ToTable("ChiTietGioHang");
 
@@ -167,7 +167,7 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<DanhGium>(entity =>
         {
-            entity.HasKey(e => e.MaDg).HasName("PK__DanhGia__272586604BF98D7C");
+            entity.HasKey(e => e.MaDg).HasName("PK__DanhGia__272586607C2A6E15");
 
             entity.Property(e => e.MaDg).HasColumnName("MaDG");
             entity.Property(e => e.MaSp).HasColumnName("MaSP");
@@ -188,7 +188,7 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<DanhMuc>(entity =>
         {
-            entity.HasKey(e => e.MaDanhMuc).HasName("PK__DanhMuc__B3750887642610DE");
+            entity.HasKey(e => e.MaDanhMuc).HasName("PK__DanhMuc__B3750887204E0D36");
 
             entity.ToTable("DanhMuc");
 
@@ -198,7 +198,7 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<DealOfWeek>(entity =>
         {
-            entity.HasKey(e => e.MaDeal).HasName("PK__DealOfWe__324A50A5FFE21560");
+            entity.HasKey(e => e.MaDeal).HasName("PK__DealOfWe__324A50A50E7DD672");
 
             entity.ToTable("DealOfWeek");
 
@@ -209,12 +209,12 @@ public partial class MaleFashionContext : DbContext
 
             entity.HasOne(d => d.MaSpNavigation).WithMany(p => p.DealOfWeeks)
                 .HasForeignKey(d => d.MaSp)
-                .HasConstraintName("FK__DealOfWeek__MaSP__05D8E0BE");
+                .HasConstraintName("FK__DealOfWeek__MaSP__6EF57B66");
         });
 
         modelBuilder.Entity<DonHang>(entity =>
         {
-            entity.HasKey(e => e.MaDh).HasName("PK__DonHang__27258661479DDD56");
+            entity.HasKey(e => e.MaDh).HasName("PK__DonHang__2725866178748803");
 
             entity.ToTable("DonHang");
 
@@ -234,7 +234,7 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<GioHang>(entity =>
         {
-            entity.HasKey(e => e.MaGioHang).HasName("PK__GioHang__F5001DA325183B0D");
+            entity.HasKey(e => e.MaGioHang).HasName("PK__GioHang__F5001DA3BD732F24");
 
             entity.ToTable("GioHang");
 
@@ -250,7 +250,7 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<InstagramImage>(entity =>
         {
-            entity.HasKey(e => e.MaAnh).HasName("PK__Instagra__356240DFD7FB4284");
+            entity.HasKey(e => e.MaAnh).HasName("PK__Instagra__356240DFC6622BDE");
 
             entity.ToTable("InstagramImage");
 
@@ -260,11 +260,11 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<KhuyenMai>(entity =>
         {
-            entity.HasKey(e => e.MaKm).HasName("PK__KhuyenMa__2725CF1512AD2E4C");
+            entity.HasKey(e => e.MaKm).HasName("PK__KhuyenMa__2725CF152B1C1B7F");
 
             entity.ToTable("KhuyenMai");
 
-            entity.HasIndex(e => e.MaCode, "UQ__KhuyenMa__152C7C5CA1CEA4BB").IsUnique();
+            entity.HasIndex(e => e.MaCode, "UQ__KhuyenMa__152C7C5C17E1B53B").IsUnique();
 
             entity.Property(e => e.MaKm).HasColumnName("MaKM");
             entity.Property(e => e.MaCode).HasMaxLength(50);
@@ -284,7 +284,7 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<SanPham>(entity =>
         {
-            entity.HasKey(e => e.MaSp).HasName("PK__SanPham__2725081C650FAA85");
+            entity.HasKey(e => e.MaSp).HasName("PK__SanPham__2725081C8D12FA93");
 
             entity.ToTable("SanPham");
 
@@ -304,11 +304,11 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<TaiKhoan>(entity =>
         {
-            entity.HasKey(e => e.MaTk).HasName("PK__TaiKhoan__27250070E5E1240D");
+            entity.HasKey(e => e.MaTk).HasName("PK__TaiKhoan__27250070654B9DC5");
 
             entity.ToTable("TaiKhoan");
 
-            entity.HasIndex(e => e.Email, "UQ__TaiKhoan__A9D10534DE54E903").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__TaiKhoan__A9D10534D592867B").IsUnique();
 
             entity.Property(e => e.MaTk).HasColumnName("MaTK");
             entity.Property(e => e.DiaChi).HasMaxLength(255);
@@ -324,7 +324,7 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<ThanhToan>(entity =>
         {
-            entity.HasKey(e => e.MaTt).HasName("PK__ThanhToa__272500790E5201A6");
+            entity.HasKey(e => e.MaTt).HasName("PK__ThanhToa__27250079C64CCFED");
 
             entity.ToTable("ThanhToan");
 
@@ -343,7 +343,7 @@ public partial class MaleFashionContext : DbContext
 
         modelBuilder.Entity<ThongTinShop>(entity =>
         {
-            entity.HasKey(e => e.MaTt).HasName("PK__ThongTin__272500794025F2A0");
+            entity.HasKey(e => e.MaTt).HasName("PK__ThongTin__27250079C884C65A");
 
             entity.ToTable("ThongTinShop");
 

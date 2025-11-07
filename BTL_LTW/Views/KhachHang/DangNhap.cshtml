@@ -1,0 +1,30 @@
+﻿@model BTL_LTW.ViewModels.RegisterVM
+<!-- ===== FORM Dang Ky ===== -->
+<div id="wrapper">
+    <div class="login-container" id="loginContainer">
+        <!-- Form bên trái -->
+        <div class="signin-box">
+            <h2>Đăng Nhập</h2>
+            <form id="form-login" asp-action="DangNhap" asp-controller="KhachHang" method="post">
+
+                <div class="form-group">
+                    <lable>Email</lable>
+                    <input asp-for="Email" class="form-input" placeholder="Email">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <lable>MatKhau</lable>
+                    <input asp-for="MatKhau" class="form-input" placeholder="Password">
+                    <span asp-validation-for="MatKhau" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn-signin">Đăng nhập</button>
+                <a asp-controller="KhachHang" asp-action="DangKy">Chưa có tài khoản</a>
+            </form>
+            <!-- Hiển thị thông báo -->
+            @if (ViewBag.Message != null)
+            {
+                <div style="color: green; font-weight: bold;">@ViewBag.Message</div>
+            }
+        </div>
+    </div>
+</div>
