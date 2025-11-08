@@ -1,0 +1,94 @@
+﻿@model BTL_LTW.ViewModels.ShoppingCartVM
+@{
+    ViewData["Title"] = "Giỏ hàng của bạn";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<section class="shopping-cart spad">
+    <div class="container">
+        <h3 class="text-center mb-4">Giỏ hàng của bạn</h3>
+
+        @if (Model.Items.Count == 0)
+        {
+            <div class="alert alert-info text-center">
+                Giỏ hàng trống. <a asp-controller="Shop" asp-action="Index">Mua sắm ngay!</a>
+            </div>
+        }
+        else
+        {
+            <table class="table table-bordered text-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr data-id="@item.MaSP">
+                            <td class="text-left">
+                                <img src="@item.AnhChinh" style="width:80px;height:80px;object-fit:cover;margin-right:10px;" />
+                                <strong>@item.TenSP</strong>
+                            </td>
+                            <td>$@String.Format("{0:N2}", item.Gia)</td>
+                            <td>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <button class="btn btn-sm btn-outline-secondary minus">-</button>
+                                    <input type="text" value="@item.SoLuong" class="form-control text-center mx-1" style="width:60px;" />
+                                    <button class="btn btn-sm btn-outline-secondary plus">+</button>
+                                </div>
+                            </td>
+                            <td class="subtotal">$@String.Format("{0:N2}", item.ThanhTien)</td>
+                            <td>
+                                <a asp-action="Remove" asp-route-id="@item.MaSP" class="btn btn-sm btn-danger">
+                                    <i class="fa fa-trash"></i> Xóa
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="text-right mt-3">
+                <h4>
+                    Tổng cộng:
+                    <span id="cartTotal" class="text-danger font-weight-bold">
+                        $@String.Format("{0:N2}", Model.TongTien)
+                    </span>
+                </h4>
+            </div>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            function updateQuantity(row, newQty) {
+                const id = row.data("id");
+                $.post('/ShoppingCart/UpdateQuantity', { id: id, quantity: newQty }, function (res) {
+                    if (res.success) {
+                        location.reload(); // đơn giản: reload lại giỏ
+                    }
+                });
+            }
+
+            $(".plus").click(function () {
+                const row = $(this).closest("tr");
+                let qty = parseInt(row.find("input").val()) + 1;
+                updateQuantity(row, qty);
+            });
+
+            $(".minus").click(function () {
+                const row = $(this).closest("tr");
+                let qty = parseInt(row.find("input").val()) - 1;
+                if (qty < 0) qty = 0;
+                updateQuantity(row, qty);
+            });
+        });
+    </script>
+}

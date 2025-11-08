@@ -54,5 +54,30 @@
 
     @RenderSection("Styles", required: false)
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Hàm gọi tới Controller để lấy tổng tiền & tổng số sản phẩm
+            function loadCartTotal() {
+                $.get('/ShoppingCart/GetCartTotal', function (res) {
+                    if (res) {
+                        // Hiển thị tổng tiền (2 số thập phân)
+                        $("#cartPrice").text(`$${res.total.toFixed(2)}`);
+                        // Hiển thị số lượng sản phẩm
+                        $("#cartCount").text(res.count);
+                    }
+                });
+            }
+
+            // Gọi khi trang load
+            loadCartTotal();
+
+            // Cho phép các trang khác gọi lại (ví dụ: AddToCart)
+            window.refreshCartTotal = loadCartTotal;
+        });
+    </script>
+
+
 </body>
 </html>

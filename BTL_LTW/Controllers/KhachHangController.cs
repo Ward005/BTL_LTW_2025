@@ -1,88 +1,104 @@
 ﻿using BTL_LTW.Data;
 using BTL_LTW.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using System.Text.Json;
 
 namespace BTL_LTW.Controllers
 {
     public class KhachHangController : Controller
     {
-        private readonly MaleFashionContext db;
+        private readonly MaleFashionContext _db;
+
         public KhachHangController(MaleFashionContext context)
         {
-            db = context;
+            _db = context;
         }
+
+        // ========== ĐĂNG KÝ ==========
         [HttpGet]
         public IActionResult DangKy()
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult DangKy(RegisterVM model)
         {
             if (ModelState.IsValid)
             {
-                //kiem tra email
-                var email1 = db.TaiKhoans.FirstOrDefault(x => x.Email == model.Email);
-                if (email1 != null)
+                // 🔹 Kiểm tra email đã tồn tại chưa
+                var existing = _db.TaiKhoans.FirstOrDefault(x => x.Email == model.Email);
+                if (existing != null)
                 {
-                    ViewBag.Message = "Tài khoản đã tồn tại";
+                    ViewBag.Message = "Tài khoản đã tồn tại!";
                     return View(model);
                 }
 
-                // nếu chưa có tài khaorn thì thêm vào database
-                var user = new TaiKhoan
+                // 🔹 Nếu chưa có thì thêm mới
+                var newUser = new TaiKhoan
                 {
                     HoTen = model.HoTen,
                     Email = model.Email,
                     MatKhau = model.MatKhau,
                     SoDienThoai = model.SoDienThoai,
                     DiaChi = model.DiaChi,
-                    VaiTro = "KhachHang"
+                    VaiTro = "KhachHang",
+                    NgayTao = DateTime.Now
                 };
-                db.TaiKhoans.Add(user);
-                db.SaveChanges();
-                //xoa du lieu form va thong bao thanh cong
-                ModelState.Clear();
-                //var KhachHang = model;
-                ViewBag.Message = "Đăng ký thành công";
-                return View(new RegisterVM());
 
+                _db.TaiKhoans.Add(newUser);
+                _db.SaveChanges();
 
-
+                // 🔹 Sau khi đăng ký thành công -> chuyển sang đăng nhập
+                TempData["Message"] = "Đăng ký thành công! Vui lòng đăng nhập.";
+                return RedirectToAction("DangNhap");
             }
+
             return View(model);
         }
 
-        //
-
+        // ========== ĐĂNG NHẬP ==========
         [HttpGet]
         public IActionResult DangNhap()
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult DangNhap(LoginVM model)
         {
             if (ModelState.IsValid)
             {
-                //kiem tra email
-                var user1 = db.TaiKhoans.FirstOrDefault(x => x.Email == model.Email && x.MatKhau == model.MatKhau);
-                if (user1 != null)
+                // 🔹 Tìm user hợp lệ
+                var user = _db.TaiKhoans.FirstOrDefault(x => x.Email == model.Email && x.MatKhau == model.MatKhau);
+                if (user != null)
                 {
-                    // ViewBag.Message = "Tài khoản đã tồn tại";
-                    //return View(model);
+                    // 🔹 Lưu toàn bộ thông tin vào Session (JSON)
+                    var userSession = new UserSessionVM
+                    {
+                        MaTK = user.MaTk,
+                        HoTen = user.HoTen,
+                        Email = user.Email,
+                        VaiTro = user.VaiTro
+                    };
 
-                    HttpContext.Session.SetString("UserEmail", user1.Email);
-                    HttpContext.Session.SetString("UserName", user1.HoTen ?? "");
+                    HttpContext.Session.SetString("UserLogin", JsonSerializer.Serialize(userSession));
+
+                    TempData["Message"] = $"Chào mừng {user.HoTen} quay lại!";
                     return RedirectToAction("Index", "Home");
                 }
-                ViewBag.Message = "Email hoặc mật khẩu không đúng định dạng";
-                // nếu chưa có tài khaorn thì thêm vào database
 
-
+                ViewBag.Message = "Email hoặc mật khẩu không đúng!";
             }
+
             return View(model);
+        }
+
+        // ========== ĐĂNG XUẤT ==========
+        public IActionResult DangXuat()
+        {
+            HttpContext.Session.Remove("UserLogin");
+            return RedirectToAction("DangNhap");
         }
     }
 }
