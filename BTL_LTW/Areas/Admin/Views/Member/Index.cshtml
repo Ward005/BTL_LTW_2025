@@ -1,0 +1,223 @@
+﻿@{
+    ViewBag.Title = "Thành viên";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">@ViewBag.Title</h1>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body table-responsive">
+        <table id="items" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 10px">#</th>
+                    <th>Họ và tên</th>
+                    <th>Email</th>
+                    <th>Mật khẩu</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Ngày tạo</th>
+                    <th>Vai trò</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@ViewBag.Title</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="Item">
+                    <input type="hidden" id="MaSP" name="MaSP" />
+
+                    <div class="form-group">
+                        <label for="maTk">Họ và tên</label>
+                        <input type="text" class="form-control" id="maTk" name="maTk"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="matKhau">Mật khẩu</label>
+                        <input type="password" class="form-control" id="matKhau" name="matKhau" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="soDienThoai">Số điện thoại</label>
+                        <input type="text" class="form-control" id="matKhau" name="matKhau" />
+                        <textarea class="form-control summernote" id="soDienThoai" name="soDienThoai"></textarea>
+                    </div>
+
+                    
+                </form>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary btnSave">Lưu</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+@section css {
+    <link href="~/plugins/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="~/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/plugins/datatables-bs4/css/datatables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/plugins/summernote/summernote.min.css" rel="stylesheet" />
+    <style>
+        div.dt-buttons {
+            float: right;
+        }
+    </style>
+}
+@section Js {
+    <script src="~/plugins/moment/moment.min.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+    <script src="~/plugins/sweetalert2/sweetalert2.all.min.js"></script>=
+    <script src="~/plugins/summernote/summernote.min.js"></script>
+    <script src="~/plugins/datatables/jquery.datatables.min.js"></script>
+    <script src="~/plugins/datatables-bs4/js/datatables.bootstrap4.min.js"></script>
+    <script src="~/plugins/datatables-buttons/js/datatables.buttons.min.js"></script>
+    <script>
+        $(function () {
+            $(".summernote").summernote();
+            var items = $("#items").DataTable({
+                "dom": "Blfrtip",
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "/Admin/Member/GetList",
+                    "type": "POST",
+                    "dataType": "json"
+                },
+                "columns": [
+                    {
+                        "data": null,
+                        "render": function (data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    { data: "hoTen" },
+                    { data: "email" },
+                    { data: "matKhau" },
+                    { data: "soDienThoai" },
+                    { data: "diaChi" },
+                    {
+                        data: "ngayTao",
+                        render: function (data) {
+                            return moment(data).format("DD/MM/YYYY HH:mm");
+                        }
+                    },
+                    { "data": "vaiTro" },
+                    {
+                        "render": function (data, type, row, meta) {
+                            return `
+                                <div class="btn-group">
+                                    <a href="#" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-cog"></i>
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item text-primary btnEdit" href="#" data-id="${row.MaTK}">
+                                            <i class="fas fa-pencil-alt mr-2"></i> Cập nhật
+                                        </a>
+                                        <a class="dropdown-item text-danger btnDelete" href="#" data-id="${row.MaTK}">
+                                            <i class="fas fa-trash-alt mr-2"></i> Xóa
+                                        </a>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                ],
+                "buttons": [
+                    {
+                        text: '<i class="fas fa-plus mr-2"></i> Thêm thành viên',
+                        className: 'btn btn-primary',
+                        action: function (e, dt, node, config) {
+                            $("#modal-default form#Item")[0].reset();
+                            $("#maTK").val("");
+                            $("#modal-default").modal('show');
+                        }
+                    }
+                ]
+            });
+            $(document).on("click", "a.btnEdit", function(){
+                let id = $(this).data("id");
+                $.getJSON("/Admin/Member/GetItem",
+                    {
+                        id: id
+                    }, function(item) {
+                        $("#maTk").val(item.MaTk);
+                        $("#hoTen").val(item.HoTen);
+                        $("#email").val(item.Email);
+                        $("#matKhau").val(item.MatKhau);
+                        $("#soDienThoai").val(item.SoDienThoai);
+                        $("#diaChi").val(item.DiaChi);
+                        $("#ngayTao").val(item.NgayTao);
+                        $("#vaiTro").val(item.VaiTro);
+                        $("#modal-default").modal("show");
+                    });
+            })
+            $(".btnSave").click(function () {
+                $.ajax({
+                    data: $("#Item").serialize(),
+                    url: "/Admin/Member/Save",
+                    type: "POST",
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    success: function (item) {
+                        $("#modal-default").modal('hide');
+                        toastr.success("Thông báo: Lưu thành công !!");
+                        items.ajax.reload();
+                    },
+                    error: function () {
+                        toastr.error("Lưu thất bại!");
+                    }
+                })
+            })
+            $(document).on("click", "a.btnDelete", function(){
+                let id = $(this).data("id");
+                Swal.fire({
+                    title: 'Bạn có chắc chắn muốn xóa?',
+                    text: "Hành động này không thể hoàn tác!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Xác nhận!',
+                    cancelButtonText: 'Hủy'
+                }).then(function (result)  {
+                    if (result.isConfirmed) {
+                        $.get("/Admin/Member/Delete",
+                            {
+                                id: id
+                            }, function(data) {
+                                if(data == true){
+                                    toastr.success("Thông báo: Xóa thành công!");
+                                    items.ajax.reload();
+                                }else {
+                                    toastr.error("Lỗi: Xóa thất bại!");
+                                }
+                            }
+                        );
+                    }
+                });
+            });
+        });
+    </script>
+}

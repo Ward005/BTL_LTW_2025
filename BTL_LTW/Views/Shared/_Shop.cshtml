@@ -3,20 +3,6 @@
 @{
     ViewData["Title"] = "_Shop";
     Layout = "_LayoutCustomer";
-
-    int currentPage = ViewBag.CurrentPage ?? 1;
-    int totalPages = ViewBag.TotalPages ?? Model.Count()/9;
-    int maxPagesToShow =  3;
-    int startPage = Math.Max(1, currentPage - 2);
-    int endPage = Math.Min(totalPages, currentPage + 2);
-
-    if (endPage - startPage + 1 < maxPagesToShow)
-    {
-        if (startPage == 1) endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
-        else if (endPage == totalPages) startPage = Math.Max(1, endPage - maxPagesToShow + 1);
-    }
-
-    var query = new RouteValueDictionary(ViewContext.HttpContext.Request.Query);
 }
 
 <!-- Breadcrumb Section Begin -->
@@ -29,7 +15,7 @@
             <div class="col-lg-3">
                 <div class="shop__sidebar">
                     <div class="shop__sidebar__search">
-                        <form asp-action="Search" asp-controller="Shop">
+                        <form asp-action="Index" asp-controller="Shop">
                             <input name="query" type="text" placeholder="Search...">
                             <button type="submit"><span class="icon_search"></span></button>
                         </form>
@@ -49,38 +35,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__left">
-                                <p>Showing 1–12 of 126 results</p>
+                                <p>Có @ViewBag.ProductSize sản phẩm</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     @RenderBody()
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="product__pagination">
-                            @for (int i = startPage; i <= endPage; i++)
-                            {
-                                query["page"] = @i;
-                                if (i == ViewBag.CurrentPage)
-                                {
-                                    <a asp-controller="Shop" asp-action="Pagination" asp-route-page="@i" class="active">@i</a>
-                                }
-                                else
-                                {
-                                    <a asp-controller="Shop" asp-action="Pagination" asp-route-page="@i">@i</a>
-                                }
-                            }
-                            @if (endPage < totalPages)
-                            {
-                                <span>...</span>
-                                query["page"] = @totalPages;
-                                <a asp-controller="Shop" asp-action="Pagination" asp-route-page="@totalPages">@totalPages</a>
-                            }
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

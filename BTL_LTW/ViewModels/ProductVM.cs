@@ -11,5 +11,9 @@
         public int SLTon { get; set; }
         public bool TrangThaiSP {  get; set; }
         public int ChatLuongSP { get; set; }
+        public int PageSize { get; set; }
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        public string Term { get; set; }
     }
 }

@@ -26,6 +26,8 @@
 </head>
 <body>
     <div>
+        @* Header *@
+
         @await Html.PartialAsync("_PagePreloder")
 
         @await Html.PartialAsync("_OffCanvasMenu")
@@ -34,6 +36,7 @@
 
         @RenderBody()
 
+        @* Footer *@
         @await Html.PartialAsync("_Footer")
     </div>
 
@@ -49,7 +52,7 @@
     <script src="~/js/owl.carousel.min.js"></script>
     <script src="~/js/main.js"></script>
 
-
+    @RenderSection("Styles", required: false)
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
