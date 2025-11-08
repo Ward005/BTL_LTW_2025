@@ -1,5 +1,6 @@
 ﻿
 @{
+
     ViewBag.Title = "Sản Phẩm";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
@@ -81,9 +82,8 @@
                     <div class="form-group">
                         <label for="TrangThai">Trạng thái</label>
                         <select id="TrangThai" name="TrangThai" class="form-control">
-                            <option value="Còn hàng">Còn hàng</option>
-                            <option value="Hết hàng">Hết hàng</option>
-                            <option value="Ngừng kinh doanh">Ngừng kinh doanh</option>
+                            <option value="true">Còn hàng</option>
+                            <option value="false">Hết hàng</option>
                         </select>
                     </div>
                 </form>
@@ -141,9 +141,15 @@
                     { "data": "tenSp" },
                     { "data": "gia" },
                     { "data": "moTa" },
-                    { "data": "anhChinh" },
+                    { "render": function (data, type, row, meta) {
+                            return `<img src="${row.anhChinh}" alt="${row.tenSp}" style="width: 80px; height: auto;" />`;
+                        }
+                    },
                     { "data": "soLuongTon" },
-                    { "data": "trangThai" },
+                    { "render": function (data, type, row, meta) {
+                            return`${row.trangThai == true ? "Còn hàng" : "Hết hàng"}`
+                        }
+                    },
                     {
                         "render": function (data, type, row, meta) {
                             return `
@@ -184,6 +190,7 @@
                     }, function(item) {
                         $("#MaSP").val(item.maSp);
                         $("#TenSP").val(item.tenSp);
+                        $("#preview-image").attr("src", item.anhChinh).show();
                         $("#Gia").val(item.gia);
                         $("#MoTa").val(item.moTa);
                         $("#NoiDung").val(item.noiDung);
@@ -240,3 +247,4 @@
         });
     </script>
 }
+
