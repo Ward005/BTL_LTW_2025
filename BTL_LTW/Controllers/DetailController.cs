@@ -19,7 +19,7 @@ namespace BTL_LTW.Controllers
             Random random = new Random();
             var result = SanPham.Select(sp => new ProductVM
             {
-                MaSP = sp.MaSp ?? 0,
+                MaSP = sp.MaSp,
                 TenSP = sp.TenSp ?? "",
                 AnhChinhSP = sp.AnhChinh ?? "",
                 ChatLuongSP = (int)random.Next(1, 6),

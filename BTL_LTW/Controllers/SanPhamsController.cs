@@ -106,7 +106,7 @@ namespace BTL_LTW.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SanPhamExists(sanPham.MaSp ?? 0))
+                    if (!SanPhamExists(sanPham.MaSp))
                     {
                         return NotFound();
                     }
