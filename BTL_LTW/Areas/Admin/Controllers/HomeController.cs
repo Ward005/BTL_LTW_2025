@@ -3,7 +3,7 @@
 namespace BTL_LTW.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class HomeController : Controller
+    public class HomeController : BaseAdminController
     {
         public IActionResult Index()
         {

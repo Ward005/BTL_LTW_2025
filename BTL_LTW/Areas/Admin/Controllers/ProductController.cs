@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 namespace BTL_LTW.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ProductController : Controller
+    public class ProductController : BaseAdminController
     {
         private readonly MaleFashionContext _dbContext;
 
