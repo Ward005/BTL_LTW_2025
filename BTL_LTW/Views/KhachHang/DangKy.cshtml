@@ -1,72 +1,48 @@
 ﻿@model BTL_LTW.ViewModels.RegisterVM
-@{
-    ViewData["Title"] = "Đăng ký";
-    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
-}
-
-@section Styles {
-    <link rel="stylesheet" href="~/css/auth-page.css" asp-append-version="true" />
-}
 
 
-<section class="auth-section">
-    <div class="auth-box">
-
-
-
-
-        <!-- ===== FORM Dang Ky ===== -->
-        <div id="wrapper">
-            <div class="login-container" id="loginContainer">
-                <!-- Form bên trái -->
-                <div class="signin-box">
-                    <h2>Đăng Ký</h2>
-                    <form id="form-login" asp-action="DangKy" asp-controller="KhachHang" method="post">
-                        <div class="form-group">
-                            <lable>Họ và tên</lable>
-                            <input asp-for="HoTen" class="form-input" placeholder="HoTen" />
-                            <span asp-validation-for="HoTen" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <lable>Email</lable>
-                            <input asp-for="Email" class="form-input" placeholder="Email">
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <lable>Mật khẩu</lable>
-                            <input asp-for="MatKhau" class="form-input" placeholder="Password">
-                            <span asp-validation-for="MatKhau" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <lable>Số điện thoại</lable>
-                            <input asp-for="SoDienThoai" class="form-input" placeholder="SoDienThoai" />
-                            <span asp-validation-for="SoDienThoai" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <lable>Địa chỉ</lable>
-                            <input asp-for="DiaChi" class="form-input" placeholder="DiaChi" />
-                            <span asp-validation-for="DiaChi" class="text-danger"></span>
-                        </div>
-                        <button class="btn-signup" id="signUpBtn">Đăng ký</button>
-                        <a asp-controller="KhachHang" asp-action="DangNhap">Đã có tài khoản</a>
-                    </form>
-                    <!-- Hiển thị thông báo -->
-                    @if (ViewBag.Message != null)
-                    {
-                        <div style="color: green; font-weight: bold;">@ViewBag.Message</div>
-                    }
+<!-- ===== FORM Dang Ky ===== -->
+<div id="wrapper">
+    <div class="login-container" id="loginContainer">
+        <!-- Form bên trái -->
+        <div class="signin-box">
+            <h2>Đăng Ký</h2>
+            <form id="form-login" asp-action="DangKy" asp-controller="KhachHang" method="post">
+                <div class="form-group">
+                    <lable>Họ và tên</lable>
+                    <input asp-for="HoTen" class="form-input" placeholder="HoTen" />
+                    <span asp-validation-for="HoTen" class="text-danger"></span>
                 </div>
-            </div>
+                <div class="form-group">
+                    <lable>Email</lable>
+                    <input asp-for="Email" class="form-input" placeholder="Email">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <lable>MatKhau</lable>
+                    <input asp-for="MatKhau" class="form-input" placeholder="Password">
+                    <span asp-validation-for="MatKhau" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <lable>SoDienThoai</lable>
+                    <input asp-for="SoDienThoai" class="form-input" placeholder="SoDienThoai" />
+                    <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <lable>DienChi</lable>
+                    <input asp-for="DiaChi" class="form-input" placeholder="DiaChi" />
+                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                </div>
+                <button class="btn-signup" id="signUpBtn">Đăng ký</button>
+                <a asp-controller="KhachHang" asp-action="DangNhap">Đã có tài khoản</a>
+            </form>
+            <!-- Hiển thị thông báo -->
+            @if (ViewBag.Message != null)
+            {
+                <div style="color: green; font-weight: bold;">@ViewBag.Message</div>
+            }
         </div>
-
-        <!-- ===== END FORM  Dang Ky ===== -->
-        <!-- BÊN PHẢI: KHỐI CHÀO MỪNG -->
-        <div class="auth-right">
-            <h2>Welcome!</h2>
-            <p>Hãy tạo tài khoản để trải nghiệm mua sắm tại <strong>Male Fashion</strong>.</p>
-        </div>
-
-
     </div>
-</section>
+</div>
 
+<!-- ===== END FORM  Dang Ky ===== -->

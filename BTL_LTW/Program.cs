@@ -11,6 +11,7 @@ builder.Services.AddDbContext<MaleFashionContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("MaleFashion"));
 });
 
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -32,9 +33,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
 app.UseSession();
-
 app.UseAuthorization();
 
 app.MapAreaControllerRoute(
