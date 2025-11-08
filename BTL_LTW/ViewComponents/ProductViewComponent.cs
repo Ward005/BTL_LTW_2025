@@ -16,7 +16,7 @@ namespace BTL_LTW.ViewComponents
             var data = db.SanPhams
                 .Select(sp => new ProductVM
                     {
-                        MaSP = sp.MaSp ?? 0,
+                        MaSP = sp.MaSp,
                         TenSP = sp.TenSp ?? "",
                         AnhChinhSP = sp.AnhChinh ?? "",
                         ChatLuongSP = (int)random.Next(1, 6),

@@ -34,7 +34,7 @@ namespace BTL_LTW.Controllers
             Random random = new Random();
             var result = SanPham.Select(sp => new ProductVM
             {
-                MaSP = sp.MaSp ?? 0,
+                MaSP = sp.MaSp,
                 TenSP = sp.TenSp ?? "",
                 AnhChinhSP = sp.AnhChinh ?? "",
                 ChatLuongSP = (int)random.Next(1, 6),
@@ -59,42 +59,5 @@ namespace BTL_LTW.Controllers
 
             return View(result);
         }
-
-        //public IActionResult FilterPrice(double? price)
-        //{
-        //    var SanPham = db.SanPhams.AsQueryable();
-            
-        //    Random random = new Random();
-        //    var result = SanPham.Select(sp => new ProductVM
-        //    {
-        //        MaSP = sp.MaSp,
-        //        TenSP = sp.TenSp ?? "",
-        //        AnhChinhSP = sp.AnhChinh ?? "",
-        //        ChatLuongSP = (int)random.Next(1, 6),
-        //        GiaSP = (double)(sp.Gia ?? 0),
-        //        MaDanhMuc = sp.MaDanhMuc ?? 0
-        //    });
-        //    return View("Index", result);
-        //}
-
-        //public IActionResult Search(string? query)
-        //{
-        //    var SanPham = db.SanPhams.AsQueryable();
-        //    if (query != null)
-        //    {
-        //        SanPham = SanPham.Where(p => p.TenSp != null && p.TenSp.Contains(query));
-        //    }
-        //    Random random = new Random();
-        //    var result = SanPham.Select(sp => new ProductVM
-        //    {
-        //        MaSP = sp.MaSp,
-        //        TenSP = sp.TenSp ?? "",
-        //        AnhChinhSP = sp.AnhChinh ?? "",
-        //        ChatLuongSP = (int)random.Next(1, 6),
-        //        GiaSP = (double)(sp.Gia ?? 0),
-        //        MaDanhMuc = sp.MaDanhMuc ?? 0
-        //    });
-        //    return View("Index", result);
-        //}
     }
 }
