@@ -15,5 +15,5 @@ public partial class DealOfWeek
 
     public DateTime? NgayKetThuc { get; set; }
 
-    public virtual SanPham? MaSpNavigation { get; set; }
+    public virtual SanPhams? MaSpNavigation { get; set; }
 }

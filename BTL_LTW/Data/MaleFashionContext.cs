@@ -41,7 +41,7 @@ public partial class MaleFashionContext : DbContext
 
     public virtual DbSet<KhuyenMai> KhuyenMais { get; set; }
 
-    public virtual DbSet<SanPham> SanPhams { get; set; }
+    public virtual DbSet<SanPhams> SanPhams { get; set; }
 
     public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
 
@@ -282,7 +282,7 @@ public partial class MaleFashionContext : DbContext
                 .HasConstraintName("FK__KhuyenMai__MaSP__5535A963");
         });
 
-        modelBuilder.Entity<SanPham>(entity =>
+        modelBuilder.Entity<SanPhams>(entity =>
         {
             entity.HasKey(e => e.MaSp).HasName("PK__SanPham__2725081C23531A7D");
 

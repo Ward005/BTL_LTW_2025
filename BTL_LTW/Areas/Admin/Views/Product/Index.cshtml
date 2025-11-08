@@ -1,0 +1,242 @@
+﻿
+@{
+    ViewBag.Title = "Sản Phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">@ViewBag.Title</h1>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body table-responsive">
+        <table id="items" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 10px">#</th>
+                    <th>Tên SP</th>
+                    <th>Giá</th>
+                    <th>Mô tả</th>
+                    <th>Ảnh</th>
+                    <th>SL tồn</th>
+                    <th>Trạng thái</th>
+                    <th>Công cụ</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@ViewBag.Title</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="Item">
+                    <input type="hidden" id="MaSP" name="MaSP" />
+
+                    <div class="form-group">
+                        <label for="TenSP">Tên sản phẩm</label>
+                        <input type="text" class="form-control" id="TenSP" name="TenSP" placeholder="Nhập tên sản phẩm" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="AnhChinh">Hình đại diện</label>
+                        <input type="file" class="form-control" id="AnhChinh" name="AnhChinh" />
+                        <img id="preview-image" style="display:none; margin-top:10px; width:100px; border:1px solid #ccc;" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="MoTa">Mô tả</label>
+                        <textarea class="form-control summernote" id="MoTa" name="MoTa"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="NoiDung">Nội dung</label>
+                        <textarea class="form-control summernote" id="NoiDung" name="NoiDung"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Gia">Giá</label>
+                        <input type="number" class="form-control" id="Gia" name="Gia" placeholder="Nhập giá sản phẩm" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="MaDanhMuc">Chuyên mục</label>
+                        <select id="MaDanhMuc" name="MaDanhMuc" class="form-control">
+                            <option value="">--- Chọn ---</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="SoLuongTon">Số lượng tồn</label>
+                        <input type="number" class="form-control" id="SoLuongTon" name="SoLuongTon" placeholder="Nhập số lượng tồn" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TrangThai">Trạng thái</label>
+                        <select id="TrangThai" name="TrangThai" class="form-control">
+                            <option value="Còn hàng">Còn hàng</option>
+                            <option value="Hết hàng">Hết hàng</option>
+                            <option value="Ngừng kinh doanh">Ngừng kinh doanh</option>
+                        </select>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary btnSave">Lưu</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+@section css {
+    <link href="~/plugins/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="~/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/plugins/datatables-bs4/css/datatables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/plugins/summernote/summernote.min.css" rel="stylesheet" />
+    <style>
+        div.dt-buttons{
+            float: right;
+        }
+    </style>
+}
+@section Js {
+    <script src="~/plugins/moment/moment.min.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+    <script src="~/plugins/sweetalert2/sweetalert2.all.min.js"></script>=
+    <script src="~/plugins/summernote/summernote.min.js"></script>
+    <script src="~/plugins/datatables/jquery.datatables.min.js"></script>
+    <script src="~/plugins/datatables-bs4/js/datatables.bootstrap4.min.js"></script>
+    <script src="~/plugins/datatables-buttons/js/datatables.buttons.min.js"></script>
+    <script>
+        $(function () {
+            $(".summernote").summernote();
+            var items = $("#items").DataTable({
+                "dom": "Blfrtip",
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "/Admin/Product/GetList",
+                    "type": "POST",
+                    "dataType": "json"
+                },
+                "columns": [
+                    {
+                        "data": null,
+                        "render": function (data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    { "data": "tenSp" },
+                    { "data": "gia" },
+                    { "data": "moTa" },
+                    { "data": "anhChinh" },
+                    { "data": "soLuongTon" },
+                    { "data": "trangThai" },
+                    {
+                        "render": function (data, type, row, meta) {
+                            return `
+                                <div class="btn-group">
+                                    <a href="#" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-cog"></i>
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item text-primary btnEdit" href="#" data-id="${row.maSp}">
+                                            <i class="fas fa-pencil-alt mr-2"></i> Cập nhật
+                                        </a>
+                                        <a class="dropdown-item text-danger btnDelete" href="#" data-id="${row.maSp}">
+                                            <i class="fas fa-trash-alt mr-2"></i> Xóa
+                                        </a>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                ],
+                "buttons": [
+                    {
+                        text: '<i class="fas fa-plus mr-2"></i> Thêm mới',
+                        className: 'btn btn-primary',
+                        action: function (e, dt, node, config) {
+                            $("#modal-default form#Item")[0].reset();
+                            $("#MaSP").val("");
+                            $("#modal-default").modal('show');
+                        }
+                    }
+                ]
+            });
+            $(document).on("click", "a.btnEdit", function(){
+                let id = $(this).data("id");
+                $.getJSON("/Admin/Product/GetItem",
+                    {
+                        id: id
+                    }, function(item) {
+                        $("#MaSP").val(item.maSp);
+                        $("#TenSP").val(item.tenSp);
+                        $("#Gia").val(item.gia);
+                        $("#MoTa").val(item.moTa);
+                        $("#NoiDung").val(item.noiDung);
+                        $("#MaDanhMuc").val(item.maDanhMuc);
+                        $("#SoLuongTon").val(item.soLuongTon);
+                        $("#TrangThai").val(item.trangThai);
+                        $("#modal-default").modal("show");
+                    });
+            })
+            $(".btnSave").click(function () {
+                $.ajax({
+                    data: $("#Item").serialize(),
+                    url: "/Admin/Product/Save",
+                    type: "POST",
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    success: function (item) {
+                        $("#modal-default").modal('hide');
+                        toastr.success("Thông báo: Lưu thành công !!");
+                        items.ajax.reload();
+                    },
+                    error: function () {
+                        toastr.error("Lưu thất bại!");
+                    }
+                })
+            })
+            $(document).on("click", "a.btnDelete", function(){
+                let id = $(this).data("id");
+                Swal.fire({
+                    title: 'Bạn có chắc chắn muốn xóa?',
+                    text: "Hành động này không thể hoàn tác!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Xác nhận!',
+                    cancelButtonText: 'Hủy'
+                }).then(function (result)  {
+                    if (result.isConfirmed) {
+                        $.get("/Admin/Product/Delete",
+                            {
+                                id: id
+                            }, function(data) {
+                                if(data == true){
+                                    toastr.success("Thông báo: Xóa thành công!");
+                                    items.ajax.reload();
+                                }else {
+                                    toastr.error("Lỗi: Xóa thất bại!");
+                                }
+                            }
+                        );
+                    }
+                });
+            });
+        });
+    </script>
+}

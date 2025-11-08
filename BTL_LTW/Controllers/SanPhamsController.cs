@@ -56,7 +56,7 @@ namespace BTL_LTW.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MaSp,TenSp,Gia,MoTa,AnhChinh,MaDanhMuc,SoLuongTon,TrangThai")] SanPham sanPham)
+        public async Task<IActionResult> Create([Bind("MaSp,TenSp,Gia,MoTa,AnhChinh,MaDanhMuc,SoLuongTon,TrangThai")] SanPhams sanPham)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace BTL_LTW.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaSp,TenSp,Gia,MoTa,AnhChinh,MaDanhMuc,SoLuongTon,TrangThai")] SanPham sanPham)
+        public async Task<IActionResult> Edit(int id, [Bind("MaSp,TenSp,Gia,MoTa,AnhChinh,MaDanhMuc,SoLuongTon,TrangThai")] SanPhams sanPham)
         {
             if (id != sanPham.MaSp)
             {
@@ -106,7 +106,7 @@ namespace BTL_LTW.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SanPhamExists(sanPham.MaSp))
+                    if (!SanPhamExists(sanPham.MaSp ?? 0))
                     {
                         return NotFound();
                     }
