@@ -1,0 +1,255 @@
+﻿/* TOÀN MÀN HÌNH - NỀN SÁNG */
+.auth-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0f2fe, #bae6fd, #93c5fd);
+    font-family: 'Poppins', sans-serif;
+    padding: 40px 0;
+}
+
+/* KHUNG CHÍNH - NHỎ GỌN, MỀM MẠI */
+.auth-box.small-box {
+    display: flex;
+    width: 780px;
+    min-height: 480px;
+    border-radius: 25px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* FORM TRÁI */
+.auth-left {
+    flex: 1.1;
+    padding: 35px 45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+    .auth-left h2 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #2563eb;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+/* GRID 2 CỘT GỌN GÀNG */
+.register-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px 25px;
+}
+
+    .register-grid .full {
+        grid-column: span 2;
+    }
+
+    .register-grid .center {
+        text-align: center;
+    }
+
+/* INPUT */
+.form-group label {
+    font-size: 13px;
+    color: #374151;
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 20px;
+    background: #f9fafb;
+    transition: 0.3s;
+}
+
+    .form-input:focus {
+        border-color: #3b82f6;
+        background: #ffffff;
+        box-shadow: 0 0 5px rgba(37, 99, 235, 0.2);
+    }
+
+/* NÚT ĐĂNG KÝ */
+.btn-auth {
+    width: 60%;
+    padding: 10px 0;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+    .btn-auth:hover {
+        background: linear-gradient(90deg, #2563eb, #3b82f6);
+    }
+
+/* LINK */
+.link-auth {
+    display: block;
+    margin-top: 8px;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+    .link-auth:hover {
+        text-decoration: underline;
+    }
+
+/* THÔNG BÁO */
+.message-success {
+    color: green;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* BÊN PHẢI - SÁNG, TƯƠI */
+.auth-right.bright-side {
+    flex: 0.9;
+    background: linear-gradient(135deg, #60a5fa, #93c5fd);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 35px;
+}
+
+.auth-right h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.auth-right p {
+    width: 85%;
+    margin-bottom: 22px;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+/* NÚT CHUYỂN */
+.btn-switch {
+    display: inline-block;
+    border: 2px solid #fff;
+    border-radius: 25px;
+    padding: 8px 28px;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+    .btn-switch:hover {
+        background: #fff;
+        color: #2563eb;
+    }
+
+/* RESPONSIVE */
+@media (max-width: 850px) {
+    .auth-box.small-box {
+        flex-direction: column;
+        width: 90%;
+        height: auto;
+    }
+
+    .register-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-auth {
+        width: 100%;
+    }
+}
+
+
+
+/* FORM ĐĂNG NHẬP TO HƠN */
+.auth-box.medium-box {
+    display: flex;
+    width: 850px;
+    min-height: 500px;
+    border-radius: 25px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* LOGIN GRID GỌN GÀNG */
+.login-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+/* NÚT TO HƠN */
+.btn-auth.large {
+    width: 70%;
+    padding: 12px 0;
+    font-size: 16px;
+}
+
+/* MÀU NỀN LOGIN SÁNG, TƯƠI */
+.auth-section {
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe, #93c5fd);
+}
+
+/* HIỆU ỨNG NỀN PHẢI */
+.auth-right.bright-side {
+    background: linear-gradient(135deg, #60a5fa, #93c5fd);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.auth-right h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.auth-right p {
+    width: 85%;
+    margin-bottom: 25px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* NÚT CHUYỂN */
+.btn-switch {
+    padding: 9px 30px;
+    border-radius: 25px;
+    border: 2px solid #fff;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+    .btn-switch:hover {
+        background: #fff;
+        color: #2563eb;
+    }
+
+/* RESPONSIVE */
+@media (max-width: 850px) {
+    .auth-box.medium-box {
+        flex-direction: column;
+        width: 90%;
+        height: auto;
+    }
+}
