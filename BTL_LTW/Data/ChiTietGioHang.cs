@@ -13,5 +13,5 @@ public partial class ChiTietGioHang
 
     public virtual GioHang MaGioHangNavigation { get; set; } = null!;
 
-    public virtual SanPhams MaSpNavigation { get; set; } = null!;
+    public virtual SanPham MaSpNavigation { get; set; } = null!;
 }

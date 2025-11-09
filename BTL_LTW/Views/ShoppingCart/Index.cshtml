@@ -1,0 +1,256 @@
+﻿@model BTL_LTW.ViewModels.PagedCartVM
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="breadcrumb__text">
+            <h4>Shopping Cart</h4>
+            <div class="breadcrumb__links">
+                <a asp-controller="Home" asp-action="Index">Home</a>
+                <a asp-controller="Shop" asp-action="Index">Shop</a>
+                <span>Shopping Cart</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="shopping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Items.Any())
+                            {
+                                foreach (var item in Model.Items)
+                                {
+                                    <tr>
+                                        <td class="product__cart__item">
+                                            <div class="product__cart__item__pic">
+                                                <img src="@item.AnhChinh" width="70">
+                                            </div>
+                                            <div class="product__cart__item__text">
+                                                <h6>@item.TenSP</h6>
+                                                <h5>$@item.Gia</h5>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="number" min="1" value="@item.SoLuong"
+                                                   onchange="updateQuantity(@item.MaSP, this.value)" />
+                                        </td>
+                                        <td>$@item.ThanhTien</td>
+                                        <td>
+                                            <a asp-controller="ShoppingCart" asp-action="Remove" asp-route-id="@item.MaSP">
+                                                <i class="fa fa-close"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="4" class="text-center">Giỏ hàng trống.</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ✅ Thanh phân trang -->
+                @if (Model.TotalPages > 1)
+                {
+                    <div class="pagination d-flex justify-content-center mt-4">
+                        <ul class="pagination">
+
+                            <!-- Nút lùi (Trang trước) -->
+                            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-controller="ShoppingCart"
+                                   asp-route-page="@(Model.CurrentPage - 1)">
+                                    &lt;
+                                </a>
+                            </li>
+
+                            <!-- Danh sách số trang -->
+                            @for (int i = 1; i <= Model.TotalPages; i++)
+                            {
+                                if (i == Model.CurrentPage)
+                                {
+                                    <li class="page-item active">
+                                        <span class="page-link">@i</span>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           asp-action="Index"
+                                           asp-controller="ShoppingCart"
+                                           asp-route-page="@i">@i</a>
+                                    </li>
+                                }
+                            }
+
+                            <!-- Nút tiến (Trang sau) -->
+                            <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-controller="ShoppingCart"
+                                   asp-route-page="@(Model.CurrentPage + 1)">
+                                    &gt;
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                }
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="cart__total">
+                    <h6>CART TOTAL</h6>
+
+                    <!-- ✅ Danh sách sản phẩm trong giỏ -->
+                    <div class="cart__summary mb-3">
+                        <ul>
+                            @if (Model.Items.Any())
+                            {
+                                foreach (var item in Model.Items)
+                                {
+                                    <li>
+                                        <span class="cart-item-name">@item.TenSP x @item.SoLuong</span>
+                                        <span class="cart-item-price">$@item.ThanhTien.ToString("0.00")</span>
+                                    </li>
+                                }
+                            }
+                            else
+                            {
+                                <li>Giỏ hàng trống.</li>
+                            }
+                        </ul>
+                    </div>
+
+                    <!-- ✅ Tổng tiền -->
+                    <div class="cart__total__amount">
+                        <p>Total</p>
+                        <h5>$@Model.Items.Sum(x => x.ThanhTien).ToString("0.00")</h5>
+                    </div>
+
+                    <!-- ✅ Nút thanh toán -->
+                    <a asp-controller="Checkout" asp-action="Index" class="primary-btn">PROCEED TO CHECKOUT</a>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        function updateQuantity(maSp, soLuong) {
+            $.post('/ShoppingCart/UpdateQuantity', { id: maSp, quantity: soLuong }, function () {
+                location.reload();
+            });
+        }
+    </script>
+}
+<style>
+    .cart__total {
+        background: #fafafa;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+        .cart__total h6 {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+    .cart__summary ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 10px 0;
+    }
+
+    .cart__summary li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        border-bottom: 1px dashed #ddd;
+    }
+
+    .cart-item-name {
+        font-size: 15px;
+        color: #222;
+        flex: 1;
+    }
+
+    .cart-item-price {
+        color: #f45b69;
+        font-weight: 600;
+        font-size: 15px;
+        min-width: 60px;
+        text-align: right;
+    }
+
+    .cart__total__amount {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 2px solid #eee;
+        padding-top: 12px;
+        margin-top: 10px;
+    }
+
+        .cart__total__amount p {
+            font-weight: 600;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .cart__total__amount h5 {
+            font-weight: 700;
+            color: #d23f3f;
+            margin: 0;
+        }
+
+    .primary-btn {
+        display: inline-block;
+        background: #111;
+        color: #fff;
+        padding: 12px 30px;
+        border-radius: 6px;
+        font-weight: 600;
+        text-transform: uppercase;
+        text-align: center;
+        letter-spacing: 0.5px;
+        width: 100%;
+        transition: 0.3s;
+        margin-top: 10px;
+    }
+
+        .primary-btn:hover {
+            background: #f7941d;
+            color: #fff;
+        }
+</style>
+

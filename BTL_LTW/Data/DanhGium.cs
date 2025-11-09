@@ -17,7 +17,7 @@ public partial class DanhGium
 
     public DateTime? NgayDanhGia { get; set; }
 
-    public virtual SanPhams? MaSpNavigation { get; set; }
+    public virtual SanPham? MaSpNavigation { get; set; }
 
     public virtual TaiKhoan? MaTkNavigation { get; set; }
 }

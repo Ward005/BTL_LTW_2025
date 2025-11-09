@@ -1,0 +1,135 @@
+﻿@{
+    ViewBag.Title = "Thống kê doanh thu theo tháng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title">@ViewBag.Title</h3>
+
+        <div>
+            <label for="yearSelect" class="mr-2">Năm:</label>
+            <select id="yearSelect" class="form-control d-inline-block" style="width:120px;">
+                @{
+                    int currentYear = DateTime.Now.Year;
+                    for (int i = currentYear; i >= currentYear - 5; i--)
+                    {
+                        <option value="@i" @(i == currentYear ? "selected" : "")>@i</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="chart-container" style="position: relative; height: 400px;">
+            <canvas id="incomeChart"></canvas>
+        </div>
+
+        <hr />
+        <h5 class="mt-4 mb-3">Bảng thống kê chi tiết</h5>
+        <table class="table table-bordered table-striped" id="tableIncome">
+            <thead>
+                <tr class="text-center">
+                    <th>Tháng</th>
+                    <th>Năm</th>
+                    <th>Doanh thu (VNĐ)</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@section Css {
+    <link href="~/plugins/toastr/toastr.min.css" rel="stylesheet" />
+}
+
+@section Js {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+
+    <script>
+        $(function () {
+            const ctx = document.getElementById('incomeChart').getContext('2d');
+            let chart;
+
+            function loadData(year) {
+                $.getJSON(`/Admin/Report/GetIncomeByMonth?year=${year}`, function (data) {
+                    if (data.length === 0) {
+                        toastr.warning("Không có dữ liệu doanh thu cho năm này!");
+                        $("#tableIncome tbody").html("<tr><td colspan='3' class='text-center'>Không có dữ liệu</td></tr>");
+                        if (chart) chart.destroy();
+                        return;
+                    }
+
+                    const labels = data.map(x => "Tháng " + x.thang);
+                    const values = data.map(x => x.doanhThu);
+
+                    // Cập nhật bảng
+                    let html = "";
+                    data.forEach(d => {
+                        html += `<tr class="text-center">
+                                    <td>${d.thang}</td>
+                                    <td>${d.nam}</td>
+                                    <td>${d.doanhThu.toLocaleString("vi-VN")} ₫</td>
+                                </tr>`;
+                    });
+                    $("#tableIncome tbody").html(html);
+
+                    // Vẽ biểu đồ
+                    if (chart) chart.destroy();
+                    chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Doanh thu (VNĐ)',
+                                data: values,
+                                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value.toLocaleString('vi-VN') + ' ₫';
+                                        }
+                                    }
+                                },
+                                x: {
+                                    ticks: { color: '#333' }
+                                }
+                            },
+                            plugins: {
+                                legend: { display: true, labels: { color: '#000' } },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(ctx) {
+                                            return ctx.parsed.y.toLocaleString('vi-VN') + ' ₫';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Load mặc định theo năm hiện tại
+            loadData($("#yearSelect").val());
+
+            // Khi đổi năm
+            $("#yearSelect").change(function () {
+                loadData($(this).val());
+            });
+        });
+    </script>
+}
+

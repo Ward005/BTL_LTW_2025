@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BTL_LTW.Data;
 
-public partial class SanPhams
+public partial class SanPham
 {
     public int MaSp { get; set; }
 

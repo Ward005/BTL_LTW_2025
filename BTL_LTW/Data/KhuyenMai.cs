@@ -21,5 +21,5 @@ public partial class KhuyenMai
 
     public virtual DanhMuc? MaDanhMucNavigation { get; set; }
 
-    public virtual SanPhams? MaSpNavigation { get; set; }
+    public virtual SanPham? MaSpNavigation { get; set; }
 }

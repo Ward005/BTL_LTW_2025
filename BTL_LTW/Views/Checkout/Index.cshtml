@@ -1,0 +1,143 @@
+﻿@model BTL_LTW.ViewModels.CheckoutVM
+@{
+    ViewData["Title"] = "Thanh toán";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="breadcrumb__text">
+            <h4>Check Out</h4>
+            <div class="breadcrumb__links">
+                <a asp-controller="Home" asp-action="Index">Home</a>
+                <a asp-controller="Shop" asp-action="Index">Shop</a>
+                <span>Check Out</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="checkout spad">
+    <div class="container">
+        <div class="checkout__form">
+            <form asp-action="Index" method="post">
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        <h6 class="checkout__title">Billing Details</h6>
+
+                        <div class="checkout__input">
+                            <p>Họ và tên<span>*</span></p>
+                            <input asp-for="HoTen" />
+                        </div>
+                        <div class="checkout__input">
+                            <p>Địa chỉ giao hàng<span>*</span></p>
+                            <input asp-for="DiaChi" />
+                        </div>
+                        <div class="checkout__input">
+                            <p>Số điện thoại<span>*</span></p>
+                            <input asp-for="SoDienThoai" />
+                        </div>
+                        <div class="checkout__input">
+                            <p>Email<span>*</span></p>
+                            <input asp-for="Email" />
+                        </div>
+                        <div class="checkout__input">
+                            <p>Ghi chú đơn hàng</p>
+                            <input asp-for="GhiChu" placeholder="Ghi chú thêm (nếu có)" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6">
+                        <div class="checkout__order">
+                            <h4 class="order__title">Your Order</h4>
+                            <div class="checkout__order__products">Product <span>Total</span></div>
+                            <ul class="checkout__total__products">
+                                @foreach (var item in Model.Items)
+                                {
+                                    <li>@item.TenSP x @item.SoLuong <span>$@item.ThanhTien.ToString("0.00")</span></li>
+                                }
+                            </ul>
+                            <ul class="checkout__total__all">
+                                <li>Total <span>$@Model.TongTien.ToString("0.00")</span></li>
+                            </ul>
+
+                            <h5>Phương thức thanh toán</h5>
+
+                            <label class="payment-option">
+                                Thanh toán khi nhận hàng (COD)
+                                <input type="radio" asp-for="PaymentMethod" value="COD" checked>
+                                <span class="payment-checkmark"></span>
+                            </label>
+                            <br />
+                            <label class="payment-option">
+                                Thanh toán online (giả lập)
+                                <input type="radio" asp-for="PaymentMethod" value="Online">
+                                <span class="payment-checkmark"></span>
+                            </label>
+
+                            <button type="submit" class="site-btn mt-3">Đặt hàng</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<style>
+    .payment-option {
+        position: relative;
+        padding-left: 30px;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 16px;
+        color: #333;
+        user-select: none;
+    }
+
+        .payment-option input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+    .payment-checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 18px;
+        width: 18px;
+        background-color: #eee;
+        border-radius: 50%;
+        border: 2px solid #ccc;
+        transition: 0.3s;
+    }
+
+    .payment-option:hover input ~ .payment-checkmark {
+        background-color: #f9caca;
+    }
+
+    .payment-option input:checked ~ .payment-checkmark {
+        background-color: #ff4d4d;
+        border-color: #ff4d4d;
+    }
+
+    .payment-checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    .payment-option input:checked ~ .payment-checkmark:after {
+        display: block;
+    }
+
+    .payment-option .payment-checkmark:after {
+        top: 4px;
+        left: 4px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: white;
+    }
+</style>

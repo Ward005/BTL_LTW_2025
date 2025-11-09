@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Liên hệ";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<!-- ====================== CONTACT PAGE ======================= -->
+<!-- Map Section Begin -->
+<div class="map">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d111551.9926412813!2d-90.27317134641879!3d38.606612219170856!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited%20States!5e0!3m2!1sen!2sbd!4v1597926938024!5m2!1sen!2sbd"
+            height="500" style="border:0; width:100%;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+</div>
+<!-- Map Section End -->
+<!-- Contact Section Begin -->
+<section class="contact spad">
+    <div class="container">
+        <div class="row">
+            <!-- THÔNG TIN LIÊN HỆ -->
+            <div class="col-lg-6 col-md-6">
+                <div class="contact__text">
+                    <div class="section-title">
+                        <span>THÔNG TIN</span>
+                        <h2>Liên hệ với chúng tôi</h2>
+                        <p>
+                            Chúng tôi luôn sẵn sàng hỗ trợ bạn!
+                            Hãy liên hệ để được tư vấn về sản phẩm, đơn hàng hoặc hợp tác.
+                        </p>
+                    </div>
+                    <ul>
+                        <li>
+                            <h4>Việt Nam</h4>
+                            <p>
+                                268 Lý Thường Kiệt, Quận 10, TP. Hồ Chí Minh<br />
+                                <strong>Hotline:</strong> +84 987 654 321<br />
+                                <strong>Email:</strong> support@malefashion.vn
+                            </p>
+                        </li>
+                        <li>
+                            <h4>Chi nhánh Mỹ</h4>
+                            <p>
+                                195 E Parker Square Dr, Parker, CO 801<br />
+                                <strong>Hotline:</strong> +43 982-314-0958
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- FORM LIÊN HỆ -->
+            <div class="col-lg-6 col-md-6">
+                <div class="contact__form">
+                    <form id="contactForm" onsubmit="return sendMessage(event)">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input type="text" id="name" placeholder="Họ và tên" required>
+                            </div>
+                            <div class="col-lg-6">
+                                <input type="email" id="email" placeholder="Email" required>
+                            </div>
+                            <div class="col-lg-12">
+                                <textarea id="message" placeholder="Nội dung liên hệ" required></textarea>
+                                <button type="submit" class="site-btn">Gửi tin nhắn</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Contact Section End -->
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function sendMessage(e) {
+            e.preventDefault();
+            const name = document.getElementById("name").value;
+            Swal.fire({
+                icon: 'success',
+                title: 'Gửi thành công!',
+                text: `Cảm ơn ${name}, chúng tôi sẽ phản hồi sớm nhất.`,
+                confirmButtonColor: '#f7941d'
+            });
+            document.getElementById("contactForm").reset();
+            return false;
+        }
+    </script>
+}

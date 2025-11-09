@@ -15,5 +15,5 @@ public partial class ChiTietDonHang
 
     public virtual DonHang MaDhNavigation { get; set; } = null!;
 
-    public virtual SanPhams MaSpNavigation { get; set; } = null!;
+    public virtual SanPham MaSpNavigation { get; set; } = null!;
 }

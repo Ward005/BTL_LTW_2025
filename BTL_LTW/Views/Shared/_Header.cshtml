@@ -9,12 +9,47 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-5">
-                    <div class="header__top__right">
-                        <div class="header__top__links">
-                            <a asp-controller="KhachHang" asp-action="DangNhap" id="signInBtn">Đăng nhập</a>
-                            <a asp-controller="KhachHang" asp-action="DangKy" id="signUpBtn">Đăng ký</a>
-                        </div>
+                    @{
+                        var userSession = Context.Session.GetString("UserLogin");
+                        BTL_LTW.ViewModels.UserSessionVM? userInfo = null;
+                        if (userSession != null)
+                        {
+                            userInfo = System.Text.Json.JsonSerializer.Deserialize<BTL_LTW.ViewModels.UserSessionVM>(userSession);
+                        }
+                    }
+
+                    <div class="header__top__right" style="display:flex;justify-content:flex-end;align-items:center;gap:20px;">
+                        @if (userInfo == null)
+                        {
+                            <!-- Nếu chưa đăng nhập -->
+                            <div class="header__top__links">
+                                <a asp-controller="KhachHang" asp-action="DangNhap" id="signInBtn">
+                                    <i class="fa fa-sign-in" aria-hidden="true"></i> Đăng nhập
+                                </a>
+                                <a asp-controller="KhachHang" asp-action="DangKy" id="signUpBtn">
+                                    <i class="fa fa-user-plus" aria-hidden="true"></i> Đăng ký
+                                </a>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- Nếu đã đăng nhập -->
+                            <div class="header__top__links" style="display:flex;align-items:center;gap:20px;">
+                                <span style="color:white;font-weight:500;">
+                                    <i class="fa fa-hand-peace-o" aria-hidden="true" style="margin-right:6px;color:white;"></i>
+                                    Xin chào, <strong>@userInfo.HoTen</strong>
+                                </span>
+                                <a asp-controller="KhachHang" asp-action="DangXuat"
+                                   style="color:white;display:flex;align-items:center;gap:6px;
+                          font-weight:600;transition:all 0.3s ease;">
+                                    <span>Đăng xuất</span>
+                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        }
                     </div>
+
                 </div>
             </div>
         </div>
@@ -29,17 +64,42 @@
             <div class="col-lg-6 col-md-6">
                 <nav class="header__menu mobile-menu">
                     <ul>
-                        <li><a href="/">Home</a></li>
+                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                         <li><a asp-controller="Shop" asp-action="Index">Shop</a></li>
-                        <li><a href="./checkout.html">Check Out</a></li>
+                        <li>
+                            <a href="#">Pages</a>
+                            <ul class="dropdown">
+                            
+                                <li><a asp-controller="Shop" asp-action="Index">Shop Details</a></li>
+
+                                <!-- ✅ Giữ dòng chữ “Shopping Cart” -->
+                                <li><a asp-controller="ShoppingCart" asp-action="Index">Shopping Cart</a></li>
+
+                                <li><a asp-controller="Checkout" asp-action="Index">Check Out</a></li>
+                                <li><a asp-controller="Blog" asp-action="Index">Blog</a></li>
+
+                            </ul>
+                        </li>
+
+                        <li><a asp-controller="Blog" asp-action="Index">Blog</a></li>
+
+                        <li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
                     </ul>
                 </nav>
             </div>
             <div class="col-lg-3 col-md-3">
                 <div class="header__nav__option">
                     <a class="search-switch"><img src="~/img/icon/search.png" alt=""></a>
-                    <a href="#"><img src="~/img/icon/cart.png" alt=""> <span>0</span></a>
-                    <div class="price">$0.00</div>
+                    <a href="#"><img src="~/img/icon/heart.png" alt=""></a>
+
+                    <!-- Link giỏ hàng -->
+                    <a asp-controller="ShoppingCart" asp-action="Index">
+                        <img src="~/img/icon/cart.png" alt="">
+                        <span id="cartCount">0</span>
+                    </a>
+
+                    <!-- ✅ Tổng tiền giỏ hàng tự động cập nhật -->
+                    <div class="price" id="cartPrice">$0.00</div>
                 </div>
             </div>
         </div>
@@ -47,14 +107,54 @@
     </div>
 </header>
 <!-- Header Section End -->
-
 <!-- Search Begin -->
 <div class="search-model">
     <div class="h-100 d-flex align-items-center justify-content-center">
         <div class="search-close-switch">+</div>
-        <form asp-controller="Shop" asp-action="Index" class="search-model-form">
-            <input name="query" type="text" id="search-input" placeholder="Search here.....">
+
+        <!-- ✅ Form gửi trực tiếp đến Shop/Index -->
+        <form asp-controller="Shop" asp-action="Index" method="get" class="search-model-form" id="searchForm">
+            <input name="query" type="text" id="search-input" placeholder="Search sản phẩm..." />
         </form>
     </div>
 </div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById("search-input");
+            const form = document.getElementById("searchForm");
+
+            // Khi ấn Enter thì gửi form
+            if (searchInput && form) {
+                searchInput.addEventListener("keypress", function (e) {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        if (searchInput.value.trim() !== "") {
+                            form.submit();
+                        }
+                    }
+                });
+            }
+
+            // Hiệu ứng mở/tắt ô tìm kiếm (template có sẵn, nhưng đảm bảo hoạt động)
+            const searchSwitch = document.querySelector(".search-switch");
+            const searchModel = document.querySelector(".search-model");
+            const searchClose = document.querySelector(".search-close-switch");
+
+            if (searchSwitch && searchModel && searchClose) {
+                searchSwitch.addEventListener("click", () => {
+                    searchModel.style.display = "block";
+                    setTimeout(() => searchModel.classList.add("active"), 10);
+                    searchInput.focus();
+                });
+
+                searchClose.addEventListener("click", () => {
+                    searchModel.classList.remove("active");
+                    setTimeout(() => searchModel.style.display = "none", 200);
+                });
+            }
+        });
+    </script>
+}
+
 <!-- Search End -->

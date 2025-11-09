@@ -13,5 +13,5 @@ public partial class DanhMuc
 
     public virtual ICollection<KhuyenMai> KhuyenMais { get; set; } = new List<KhuyenMai>();
 
-    public virtual ICollection<SanPhams> SanPhams { get; set; } = new List<SanPhams>();
+    public virtual ICollection<SanPham> SanPhams { get; set; } = new List<SanPham>();
 }
