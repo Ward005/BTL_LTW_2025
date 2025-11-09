@@ -48,8 +48,23 @@ namespace BTL_LTW.Areas.Admin.Controllers
             }
             IsLoggedIn = true;
 
+
+            // ✅ Lưu session thông tin admin
+            HttpContext.Session.SetString("AdminName", admin.HoTen ?? "");
+            HttpContext.Session.SetString("AdminEmail", admin.Email ?? "");
+
+            IsLoggedIn = true;
+
+
             // ✅ Nếu đúng → chuyển sang Home (Admin)
             return RedirectToAction("Index", "Home", new { area = "Admin" });
         }
+
+        public IActionResult DangXuat()
+        {
+            HttpContext.Session.Clear(); // Xóa toàn bộ session đăng nhập
+            return RedirectToAction("Login", "LoginAdmin"); // Quay về trang đăng nhập
+        }
+
     }
 }
