@@ -1,0 +1,168 @@
+﻿@{
+    ViewBag.Title = "Đơn đặt hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title">@ViewBag.Title</h3>
+    </div>
+
+    <div class="card-body table-responsive">
+        <table id="orders" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Tên khách hàng</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Địa chỉ giao</th>
+                    <th>Trạng thái</th>
+                    <th>Công cụ</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- 🔽 Modal Chi tiết đơn hàng -->
+<!-- Modal Chi tiết đơn hàng -->
+<div class="modal fade" id="modal-detail">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Chi tiết đơn hàng</h5>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Mã đơn:</strong> <span id="detail-ma"></span></p>
+                <p><strong>Khách hàng:</strong> <span id="detail-khach"></span></p>
+                <p><strong>Ngày đặt:</strong> <span id="detail-ngay"></span></p>
+                <p><strong>Địa chỉ giao:</strong> <span id="detail-diachi"></span></p>
+
+                <div class="form-group">
+                    <label><strong>Trạng thái đơn hàng:</strong></label>
+                    <select id="detail-trangthai" class="form-control">
+                        <option value="Chờ xử lý">Chờ xử lý</option>
+                        <option value="Đang giao">Đang giao</option>
+                        <option value="Hoàn tất">Hoàn tất</option>
+                        <option value="Hủy">Hủy</option>
+                    </select>
+                </div>
+
+                <hr />
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Mã SP</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detail-items"></tbody>
+                </table>
+                <div class="text-right">
+                    <h5>Tổng cộng: <span id="detail-tong" class="text-danger font-weight-bold"></span></h5>
+                </div>
+            </div>
+
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button id="btnSaveStatus" type="button" class="btn btn-success">
+                    <i class="fas fa-save"></i> Lưu thay đổi
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Css {
+    <link href="~/plugins/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="~/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/plugins/datatables-bs4/css/datatables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+@section Js {
+    <script src="~/plugins/moment/moment.min.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+    <script src="~/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="~/plugins/datatables/jquery.datatables.min.js"></script>
+    <script src="~/plugins/datatables-bs4/js/datatables.bootstrap4.min.js"></script>
+
+    <script>
+        $(function () {
+            var table = $("#orders").DataTable({
+                dom: "Blfrtip",
+                processing: true,
+                serverSide: true,
+                ajax: { url: "/Admin/Order/GetList", type: "POST", dataType: "json" },
+                columns: [
+                    { data: null, render: (d, t, r, m) => m.row + 1 },
+                    { data: "tenKhachHang" },
+                    { data: "ngayDat", render: d => moment(d).format("DD/MM/YYYY") },
+                    { data: "tongTien", render: d => d?.toLocaleString("vi-VN") + " ₫" },
+                    { data: "diaChiGiao" },
+                    { data: "trangThai" },
+                    {
+                        data: "maDH",
+                        render: id => `<button class="btn btn-info btn-sm btnDetail" data-id="${id}"><i class="fas fa-eye"></i> Xem</button>`
+                    }
+                ]
+            });
+
+            let currentOrderId = null;
+
+            // 🔍 Xem chi tiết
+            $(document).on("click", ".btnDetail", function () {
+                const id = $(this).data("id");
+                currentOrderId = id;
+
+                $.getJSON("/Admin/Order/GetDetail", { id: id }, function (order) {
+                    $("#detail-ma").text(order.maDH);
+                    $("#detail-khach").text(order.tenKhachHang);
+                    $("#detail-ngay").text(moment(order.ngayDat).format("DD/MM/YYYY"));
+                    $("#detail-diachi").text(order.diaChiGiao);
+                    $("#detail-trangthai").val(order.trangThai);
+
+                    let html = "";
+                    let tong = 0;
+                    order.sanPhams.forEach(sp => {
+                        const thanhTien = (sp.gia || 0) * (sp.soLuong || 0);
+                        tong += thanhTien;
+                        html += `
+                            <tr>
+                                <td>${sp.maSP}</td>
+                                <td>${sp.tenSP}</td>
+                                <td>${sp.soLuong}</td>
+                                <td>${(sp.gia || 0).toLocaleString("vi-VN")} ₫</td>
+                                <td>${thanhTien.toLocaleString("vi-VN")} ₫</td>
+                            </tr>`;
+                    });
+                    $("#detail-items").html(html);
+                    $("#detail-tong").text(tong.toLocaleString("vi-VN") + " ₫");
+
+                    $("#modal-detail").modal("show");
+                });
+            });
+
+            // 💾 Lưu thay đổi trạng thái
+            $("#btnSaveStatus").click(function () {
+                const newStatus = $("#detail-trangthai").val();
+
+                $.post("/Admin/Order/UpdateStatus", { id: currentOrderId, trangThai: newStatus }, function (res) {
+                    if (res.success) {
+                        toastr.success(res.message);
+                        $("#modal-detail").modal("hide");
+                        table.ajax.reload();
+                    } else {
+                        toastr.error("Cập nhật thất bại!");
+                    }
+                }).fail(() => toastr.error("Có lỗi xảy ra khi cập nhật!"));
+            });
+        });
+    </script>
+}
