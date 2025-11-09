@@ -1,0 +1,105 @@
+﻿@{
+    ViewData["Title"] = "Đăng nhập / Đăng ký";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+    var mode = (ViewBag.Mode as string ?? "login").ToLower();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+}
+
+<div class="auth-page">
+    <div class="container" id="container">
+        <!-- FORM ĐĂNG KÝ -->
+        <div class="form-container sign-up-container">
+            <form asp-action="DangKy" asp-controller="KhachHang" method="post">
+                @Html.AntiForgeryToken()
+                <h1>Tạo tài khoản</h1>
+
+                <input name="HoTen" type="text" placeholder="Họ và tên" required />
+                <input name="Email" type="email" placeholder="Email" required />
+                <input name="MatKhau" type="password" placeholder="Mật khẩu" required />
+                <input name="SoDienThoai" type="tel" placeholder="Số điện thoại" />
+                <input name="DiaChi" type="text" placeholder="Địa chỉ" />
+
+                <button type="submit">Đăng ký</button>
+                @if (ViewBag.ValidationErrors != null)
+                {
+                    <ul style="color:red; text-align:left; margin-top:8px;">
+                        @foreach (var err in (List<string>)ViewBag.ValidationErrors)
+                        {
+                            <li>@err</li>
+                        }
+                    </ul>
+                }
+
+
+                @if (ViewBag.Message != null && ViewBag.Mode == "register")
+                {
+                    <div style="color:red;margin-top:8px;">@ViewBag.Message</div>
+                }
+                @if (TempData["Message"] != null && ViewBag.Mode == "register")
+                {
+                    <div style="color:green;margin-top:8px;">@TempData["Message"]</div>
+                }
+            </form>
+        </div>
+
+        <!-- FORM ĐĂNG NHẬP -->
+        <div class="form-container sign-in-container">
+            <form asp-action="DangNhap" asp-controller="KhachHang" method="post">
+                @Html.AntiForgeryToken()
+                <h1>Đăng nhập</h1>
+                <span>Hoặc dùng tài khoản của bạn</span>
+
+                <input name="Email" type="email" placeholder="Email" required />
+                <input name="MatKhau" type="password" placeholder="Mật khẩu" required />
+                <a href="#">Quên mật khẩu?</a>
+
+                <button type="submit">Đăng nhập</button>
+
+                @if (ViewBag.Message != null && ViewBag.Mode == "login")
+                {
+                    <div style="color:red;margin-top:8px;">@ViewBag.Message</div>
+                }
+                @if (TempData["Message"] != null && ViewBag.Mode == "login")
+                {
+                    <div style="color:green;margin-top:8px;">@TempData["Message"]</div>
+                }
+            </form>
+        </div>
+
+        <!-- OVERLAY -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Chào mừng trở lại!</h1>
+                    <p>Đăng nhập để tiếp tục mua sắm cùng <strong>Male Fashion</strong></p>
+                    <button class="ghost" id="signIn">Đăng nhập</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Xin chào, bạn mới!</h1>
+                    <p>Tạo tài khoản và bắt đầu hành trình cùng <strong>Male Fashion</strong></p>
+                    <button class="ghost" id="signUp">Đăng ký</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const container = document.getElementById('container');
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+
+        signUpButton.addEventListener('click', () => container.classList.add("right-panel-active"));
+        signInButton.addEventListener('click', () => container.classList.remove("right-panel-active"));
+
+        (function init() {
+            const qs = new URLSearchParams(window.location.search);
+            const qmode = (qs.get('mode') || '@mode').toLowerCase();
+            if (qmode === 'register') container.classList.add("right-panel-active");
+        })();
+    </script>
+}

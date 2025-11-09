@@ -70,10 +70,10 @@ namespace BTL_LTW.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Save(ProductViewModel model)
         {
-            BTL_LTW.Data.SanPhams item;
+            BTL_LTW.Data.SanPham item;
             if (model.MaSP == null)
             {
-                item = new BTL_LTW.Data.SanPhams();
+                item = new BTL_LTW.Data.SanPham();
                 item.TenSp = model.TenSP;
                 await _dbContext.SanPhams.AddAsync(item);
             }

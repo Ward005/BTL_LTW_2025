@@ -3849,3 +3849,12 @@ ol {
 		height: 250px;
 	}
 }
+.header__top__links a {
+	transition: all 0.3s ease;
+}
+
+	.header__top__links a:hover {
+		color: #f1f1f1 !important;
+		transform: translateX(3px);
+		text-decoration: none;
+	}

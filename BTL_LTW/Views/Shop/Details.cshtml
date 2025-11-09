@@ -1,0 +1,119 @@
+﻿@model BTL_LTW.ViewModels.ProductDetailVM
+@{
+    ViewData["Title"] = Model.TenSP;
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<!-- Shop Details Section Begin -->
+<section class="shop-details spad">
+    <div class="container">
+        <div class="row justify-content-center align-items-start">
+            <!-- ẢNH SẢN PHẨM -->
+            <div class="col-lg-5 col-md-6 text-center">
+                <div class="product__details__pic" style="background: none; box-shadow: none;">
+                    <div class="product__details__pic__item" style="background: none; padding: 10px;">
+                        <img src="@Model.AnhChinhSP" alt="@Model.TenSP"
+                             class="img-fluid"
+                             style="max-width: 85%; height: auto; border-radius: 10px; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- THÔNG TIN SẢN PHẨM -->
+            <div class="col-lg-6 col-md-6">
+                <div class="product__details__text"
+                     style="padding: 25px; background-color: #f9f9f9; border-radius: 10px; border: 1px solid #ddd;">
+                    <h4 style="font-size: 26px; font-weight: 700; margin-bottom: 10px;">
+                        @Model.TenSP
+                    </h4>
+                    <h3 style="color: #f7941d; font-weight: 700; margin-bottom: 15px;">
+                        $@Model.GiaSP
+                    </h3>
+                    <p style="font-size: 16px; color: #444;">@Model.MoTaSP</p>
+                    <p><strong>Danh mục:</strong> @Model.DanhMuc</p>
+                    <p><strong>Số lượng còn lại:</strong> @Model.SoLuongTon</p>
+
+                    @if (Model.SoLuongTon > 0)
+                    {
+                        <div class="product__details__cart__option" style="margin-top: 15px;">
+                            <!-- ✅ Nút bấm thay cho form -->
+                            <button type="button" class="primary-btn" id="btnAddToCart" data-id="@Model.MaSP">
+                                ADD TO CART
+                            </button>
+                        </div>  
+                    }
+                    else
+                    {
+                        <p style="color:red; font-weight:bold; margin-top:10px;">Hết hàng</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop Details Section End -->
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const btn = document.getElementById("btnAddToCart");
+        if (btn) {
+            btn.addEventListener("click", function () {
+                const id = this.getAttribute("data-id");
+
+                // Gọi POST tới controller AddToCart
+                fetch("/ShoppingCart/AddToCart", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `id=${id}`
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.needLogin) {
+                            Swal.fire({
+                                icon: "info",
+                                title: "Bạn cần đăng nhập",
+                                text: "Hãy đăng nhập để thêm sản phẩm vào giỏ hàng.",
+                                confirmButtonText: "Đăng nhập",
+                                confirmButtonColor: "#f7941d"
+                            }).then(() => {
+                                window.location.href = "/KhachHang/DangNhap";
+                            });
+                        }
+                        else if (result.ok) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Đã thêm vào giỏ hàng!",
+                                text: result.message,
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                            // ✅ Cập nhật header (nếu có)
+                            if (result.count !== undefined) {
+                                const countEl = document.getElementById("cartCount");
+                                const priceEl = document.getElementById("cartPrice");
+                                if (countEl) countEl.textContent = result.count;
+                                if (priceEl) priceEl.textContent = `$${result.total.toFixed(2)}`;
+                            }
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Thêm thất bại!",
+                                text: result.message || "Không thể thêm sản phẩm.",
+                                confirmButtonColor: "#d33"
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Lỗi kết nối",
+                            text: "Không thể gửi yêu cầu đến máy chủ.",
+                        });
+                    });
+            });
+        }
+    </script>
+}

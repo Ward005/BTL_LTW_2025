@@ -5,17 +5,18 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Drawing.Printing;
 using X.PagedList.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace BTL_LTW.Controllers
 {
     public class ShopController : Controller
     {
-        private readonly MaleFashionContext db;
+        private readonly MaleFashionContext _db;
 
-        public ShopController(MaleFashionContext context) => db = context;
+        public ShopController(MaleFashionContext context) => _db = context;
         public IActionResult Index(int? category, double? price, string query = "", int currentPage = 1)
         {
-            var SanPham = db.SanPhams.AsQueryable();
+            var SanPham = _db.SanPhams.AsQueryable();
             if (category.HasValue)
             {
                 SanPham = SanPham.Where(p => p.MaDanhMuc == category.Value);
@@ -41,8 +42,8 @@ namespace BTL_LTW.Controllers
                 GiaSP = (double)(sp.Gia ?? 0),
                 MaDanhMuc = sp.MaDanhMuc ?? 0
             });
-            int totalRecords = result.Count(); 
-            int pageSize = 6; 
+            int totalRecords = result.Count();
+            int pageSize = 6;
             int totalPages = (int)(Math.Ceiling((double)(totalRecords) / pageSize));
 
             result = result.OrderBy(sp => sp.MaSP)
@@ -59,5 +60,31 @@ namespace BTL_LTW.Controllers
 
             return View(result);
         }
+        public IActionResult Details(int id)
+        {
+            var sp = _db.SanPhams
+                        .Include(x => x.AnhSanPhams)
+                        .Include(x => x.MaDanhMucNavigation)
+                        .FirstOrDefault(x => x.MaSp == id);
+
+            if (sp == null)
+                return NotFound();
+
+            // Tạo ViewModel chứa ảnh chính và phụ
+            var vm = new ProductDetailVM
+            {
+                MaSP = sp.MaSp,
+                TenSP = sp.TenSp ?? "",
+                GiaSP = (double)(sp.Gia ?? 0),
+                MoTaSP = sp.MoTa ?? "",
+                AnhChinhSP = sp.AnhChinh ?? "/img/default.jpg",
+                DanhMuc = sp.MaDanhMucNavigation?.TenDanhMuc ?? "",
+                SoLuongTon = sp.SoLuongTon ?? 0
+            };
+
+            return View(vm);
+        }
+
+      
     }
 }

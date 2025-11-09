@@ -1,0 +1,61 @@
+﻿@model BTL_LTW.Data.BaiViet
+@{
+    ViewData["Title"] = Model.TieuDe;
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-blog set-bg" data-setbg="~/img/breadcrumb-bg.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>@Model.TieuDe</h2>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Blog Details Section Begin -->
+<section class="blog-details spad">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="blog__details__content">
+                    <div class="blog__details__pic mb-4">
+                        <img src="@Model.AnhBia" alt="@Model.TieuDe" class="img-fluid rounded shadow" />
+                    </div>
+
+                    <div class="blog__details__text">
+                        <h3 class="mb-3">@Model.TieuDe</h3>
+                        <p class="text-muted mb-4">
+                            Đăng bởi: <strong>@(Model.MaTkNavigation?.HoTen ?? "Admin")</strong> —
+                            @(Model.NgayDang?.ToString("dd/MM/yyyy"))
+                        </p>
+
+                        <div class="blog__details__body" style="font-size:16px;line-height:1.8;">
+                            @Html.Raw(Model.NoiDung)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Blog Details Section End -->
+<style>
+    .blog__details__content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .blog__details__text h3 {
+        font-weight: 700;
+        color: #111;
+    }
+
+    .blog__details__text p {
+        font-size: 15px;
+        color: #555;
+    }
+</style>

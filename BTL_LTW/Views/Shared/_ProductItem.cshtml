@@ -1,17 +1,19 @@
 ﻿<div class="product__item">
     <div class="product__item__pic set-bg" data-setbg="@Model.AnhChinhSP">
         <ul class="product__hover">
-            <li><a asp-action="Index" asp-controller="Detail" asp-route-MaSP="@Model.MaSP"><img src="~/img/icon/search.png" alt=""></a></li>
+            <li>
+                <a asp-action="Details" asp-controller="Shop" asp-route-id="@Model.MaSP">
+                    <img src="~/img/icon/search.png" alt="Xem chi tiết">
+                </a>
+
+            </li>
         </ul>
     </div>
     <div class="product__item__text">
         <h6>@Model.TenSP</h6>
-        <a asp-controller="ShoppingCart"
-           asp-action="AddToCart"
-           asp-route-id="@Model.MaSP"
-           class="add-cart">
-            + Add To Cart
-        </a>
+
+        <!-- Nút Add to cart dùng AJAX -->
+        <a href="#" class="add-cart js-add-cart" data-id="@Model.MaSP">+ Add To Cart</a>
 
         <div class="rating">
             @for (int j = 0; j < 5; j++)
@@ -22,6 +24,7 @@
                 }
                 else
                 {
+
                     <i class="fa fa-star-o"></i>
                 }
             }
@@ -29,3 +32,12 @@
         <h5>$@Model.GiaSP</h5>
     </div>
 </div>
+<style>
+    .product__hover li a img {
+        transition: transform 0.3s ease;
+    }
+
+    .product__hover li a:hover img {
+        transform: scale(1.2);
+    }
+</style>

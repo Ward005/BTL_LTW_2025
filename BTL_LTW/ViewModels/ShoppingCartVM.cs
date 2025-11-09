@@ -17,4 +17,11 @@ namespace BTL_LTW.ViewModels
         public List<CartItemVM> Items { get; set; } = new();
         public decimal TongTien => Items.Sum(i => i.ThanhTien);
     }
+
+    public class PagedCartVM
+    {
+        public List<CartItemVM> Items { get; set; } = new();
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+    }
 }
