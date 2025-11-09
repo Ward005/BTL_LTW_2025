@@ -31,17 +31,24 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index3.html" class="nav-link">Home</a>
+                    <a href="@Url.Action("Index", "Home", new { area = "Admin" })" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
+                    <a href="@Url.Action("Index", "Contact", new { area = "Admin" })" class="nav-link">Contact</a>
                 </li>
             </ul>
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
+
+                <!-- Nút đăng xuất -->
+                <a href="@Url.Action("DangXuat", "LoginAdmin", new { area = "Admin" })" class="nav-link text-primary" role="button">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </a>
+
                 <!-- Navbar Search -->
                 <li class="nav-item">
+                    
                     <a class="nav-link" data-widget="navbar-search" href="#" role="button">
                         <i class="fas fa-search"></i>
                     </a>
@@ -163,9 +170,9 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
+            <a href="@Url.Action("Index", "Home", new { area = "Admin" })" class="brand-link">
                 <img src="/img/AdminLTELogo.png" alt="Male Fashion Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">AdminLTE 3</span>
+                <span class="brand-text font-weight-light">@Context.Session.GetString("AdminEmail")</span>
             </a>
 
             <!-- Sidebar -->
@@ -176,7 +183,7 @@
                         <img src="/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Alexander Pierce</a>
+                        <a href="@Url.Action("Index", "Member", new { area = "Admin" })" class="d-block">@Context.Session.GetString("AdminName")</a>
                     </div>
                 </div>
 
@@ -286,10 +293,6 @@
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Thành viên</p>
                                     </a>
-                                    <a href="@Url.Action("Index", "Group", new { area = "Admin" })" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Group</p>
-                                    </a>
                                 </li>
                             </ul>
                         </li>
@@ -311,8 +314,8 @@
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                                <li class="breadcrumb-item active">@ViewBag.Title v1</li>
+                                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { area = "Admin" })">Trang chủ</a></li>
+                                <li class="breadcrumb-item active">@ViewBag.Title</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
